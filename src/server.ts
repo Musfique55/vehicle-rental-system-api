@@ -21,6 +21,14 @@ app.use("/api/v1/users",userRoutes);
 // vehicles
 app.use("/api/v1/vehicles",vehicleRoutes);
 
+app.use((req,res) => {
+    return res.status(404).json({
+        success : false,
+        message : "route not found",
+        path : req.originalUrl
+    })
+})
+
 app.listen(config.port,() => {
     console.log(`port running on ${config.port}`);
 })
