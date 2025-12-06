@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { vehicleServices } from "./vehicles.services";
+import sendJson from "../../helper/sendJson";
 
 const createVehicles = async (req: Request, res: Response) => {
   const {
@@ -50,18 +51,16 @@ const getAllVehicles = async (req: Request, res: Response) => {
   try {
     const result = await vehicleServices.getAllVehicles();
     if (!result.rows.length) {
-      return res.status(201).json({
-        success: true,
-        message: "Vehicle retrieved successfully",
-        data: result.rows,
-      });
-    }else {
-    return res.status(201).json({
-      success: true,
-      message: "No vehicles found",
-      data: result.rows,
-    });
-}
+      return sendJson(res, "No vehicle found", 404, false);
+    } else {
+      return sendJson(
+        res,
+        "Vehicles retrieved successfully",
+        200,
+        true,
+        result.rows
+      );
+    }
   } catch (error: any) {
     return res.status(500).json({
       success: false,
@@ -70,7 +69,61 @@ const getAllVehicles = async (req: Request, res: Response) => {
   }
 };
 
+const getVehicle = async (req: Request, res: Response) => {
+  const { vehicleId } = req.params;
+  try {
+    const result = await vehicleServices.getVehicle(vehicleId as string);
+    if (!result.rows.length) {
+      return sendJson(res, "No vehicle found", 404, false);
+    } else {
+      return sendJson(
+        res,
+        "Vehicle retrieved successfully",
+        200,
+        true,
+        result.rows[0]
+      );
+    }
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateVehicle = async (req:Request,res:Response) =>{
+  const {vehicleId} = req.params;
+  try {
+    const result = await vehicleServices.updateVehicle(vehicleId as string,req.body);
+    if(!result.rows.length){
+      return sendJson(res,"No vehicle found to update",404,false);
+    }else{
+      return sendJson(res,"Vehicle updated successfully",200,true,result.rows[0]);
+    }
+  } catch (error : any) {
+    return sendJson(res,error.message,500,false);
+  }
+}
+
+const deleteVehicle = async (req: Request,res: Response) => {
+  const {vehicleId} = req.params;
+  try {
+    const result = await vehicleServices.deleteVehicle(vehicleId as string);
+    if(result.rowCount){
+      return sendJson(res,"Vehicle deleted successfully",200,true);
+    }else{
+      return sendJson(res,"no vehicle found to delete",404,false);
+    }
+  } catch (error : any) {
+    return sendJson(res,error.message,500,false);
+  }
+}
+
 export const vehiclesController = {
   createVehicles,
   getAllVehicles,
+  getVehicle,
+  updateVehicle,
+  deleteVehicle
 };
