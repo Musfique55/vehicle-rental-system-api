@@ -11,6 +11,7 @@ app.use(express.json());
 // db init
 initDB();
 
+
 // auth
 app.use("/api/v1/auth",authRoutes);
 
