@@ -9,7 +9,7 @@ export const initDB = async () => {
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL CHECK (char_length(password) >= 5),
+        password TEXT NOT NULL CHECK (char_length(password) >= 6),
         phone VARCHAR(15) NOT NULL,
         role VARCHAR(8) NOT NULL
         )
