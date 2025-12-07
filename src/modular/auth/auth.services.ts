@@ -24,7 +24,7 @@ const loginUser = async (payload : Record<string,unknown>) => {
 
     const user = result.rows[0];
 
-    const matched = bcrypt.compare(password as string,user.password);
+    const matched = await bcrypt.compare(password as string,user.password);
 
     if(!matched){
         throw new Error("invalid credentials");
