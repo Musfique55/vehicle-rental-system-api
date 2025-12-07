@@ -51,7 +51,7 @@ const getAllVehicles = async (req: Request, res: Response) => {
   try {
     const result = await vehicleServices.getAllVehicles();
     if (!result.rows.length) {
-      return sendJson(res, "No vehicle found", 404, false);
+      return sendJson(res, "No vehicle found", 200, true,result.rows);
     } else {
       return sendJson(
         res,
