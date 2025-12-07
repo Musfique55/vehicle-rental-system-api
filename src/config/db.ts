@@ -37,4 +37,10 @@ export const initDB = async () => {
         status TEXT NOT NULL
         ) 
         `)
+
+    await pool.query(`
+        UPDATE bookings
+        SET status = 'returned'
+        WHERE rent_end_date < NOW() AND status != 'returned';
+        `)    
 }

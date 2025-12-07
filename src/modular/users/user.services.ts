@@ -1,5 +1,5 @@
 import { pool } from "../../config/db";
-import sendJson from "../../helper/sendJson";
+
 
 const getAllUsers = async () => {
   const result = await pool.query(`SELECT id,name,email,phone,role FROM users`);
@@ -35,6 +35,11 @@ const updateUser = async (
   return result;
 };
 
+const getSingleUser = async (id : string) => {
+  const result = await pool.query(`SELECT * FROM users WHERE id=$1`,[id]);
+  return result;
+}
+
 const deleteUser = async (id:string) => {
     const hasAnyBookings = await pool.query(`SELECT * FROM bookings WHERE customer_id=$1`,[id]);
     if(hasAnyBookings.rows.length){
@@ -47,5 +52,6 @@ const deleteUser = async (id:string) => {
 export const userServices = {
   getAllUsers,
   updateUser,
-  deleteUser
+  deleteUser,
+  getSingleUser
 };
