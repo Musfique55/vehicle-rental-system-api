@@ -52,8 +52,8 @@ Ensure you have the following installed:
 Clone the project repository to your local machine:
 
 ```bash
-git clone <YOUR_REPO_URL>
-cd vehicle-rental-api
+git clone <https://github.com/Musfique55/vehicle-rental-system-api.git>
+cd vehicle-rental-system-api
 ```
 ### Step 2: Install Dependencies
 
