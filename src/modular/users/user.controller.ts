@@ -28,7 +28,7 @@ const updateUser = async (req: Request, res: Response) => {
     });
   }
   try {
-    const result = await userServices.updateUser(userId!, req.body);
+    const result = await userServices.updateUser(userId!, req.body,req?.user?.role === "admin");
     if (!result.rows.length) {
       return res.status(404).json({
         success: false,

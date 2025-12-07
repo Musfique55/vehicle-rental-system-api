@@ -4,6 +4,8 @@ import { config } from "./config";
 import { authRoutes } from "./modular/auth/auth.route";
 import { userRoutes } from "./modular/users/user.route";
 import { vehicleRoutes } from "./modular/vehicles/vehicles.route";
+import { bookingRoutes } from "./modular/bookings/booking.routes";
+import getDays from "./helper/countDays";
 
 const app = express();
 app.use(express.json());
@@ -21,6 +23,10 @@ app.use("/api/v1/users",userRoutes);
 // vehicles
 app.use("/api/v1/vehicles",vehicleRoutes);
 
+// bookings
+app.use("/api/v1/bookings",bookingRoutes);
+
+// 404 route handling
 app.use((req,res) => {
     return res.status(404).json({
         success : false,

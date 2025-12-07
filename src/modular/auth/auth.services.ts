@@ -32,7 +32,7 @@ const loginUser = async (payload : Record<string,unknown>) => {
 
     delete user.password;
 
-    const token = jwt.sign({name:user.name,email : user.email,role:user.role},config.jwt_secret as string,{expiresIn : "10h"});
+    const token = jwt.sign({name:user.name,email : user.email,role:user.role,id:user.id},config.jwt_secret as string,{expiresIn : "10h"});
 
     return {token,user};
 

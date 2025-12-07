@@ -59,6 +59,10 @@ const updateVehicle = async (id: string, payload: Payload) => {
 };
 
 const deleteVehicle = async (id: string) => {
+  const hasAnyBookings = await pool.query(`SELECT * FROM bookings WHERE vehicle_id=$1`,[id]);
+    if(hasAnyBookings.rows.length){
+      throw new Error("vehicle is on rent cannot be deleted"); 
+    }
   const result = await pool.query(`DELETE FROM vehicles WHERE id=$1`,[id]);
   return result;
 };
