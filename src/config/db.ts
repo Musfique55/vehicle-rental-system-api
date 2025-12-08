@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { config } from ".";
+import cron from "node-cron"
 
 export const pool = new Pool({connectionString : config.connectionStr});
 
@@ -36,11 +37,25 @@ export const initDB = async () => {
         total_price INT NOT NULL,
         status TEXT NOT NULL
         ) 
-        `)
-
-    await pool.query(`
-        UPDATE bookings
-        SET status = 'returned'
-        WHERE rent_end_date < NOW() AND status != 'returned';
-        `)    
+        `)   
 }
+
+cron.schedule('0 * * * *',async () => {
+    try {
+        await pool.query("BEGIN");
+        await pool.query(`
+            WITH updated_bookings AS (
+            UPDATE  bookings
+            SET status = 'returned'
+            WHERE rent_end_date < NOW() AND status != 'returned'
+            RETURNING vehicle_id
+            )
+            UPDATE vehicles
+            SET availability_status = 'available'
+            WHERE id IN (SELECT vehicle_id FROM updated_bookings)
+            `);
+        await pool.query("COMMIT");    
+    } catch (error) {
+        await pool.query(`ROLLBACK`);
+    }
+});

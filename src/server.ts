@@ -5,7 +5,6 @@ import { authRoutes } from "./modular/auth/auth.route";
 import { userRoutes } from "./modular/users/user.route";
 import { vehicleRoutes } from "./modular/vehicles/vehicles.route";
 import { bookingRoutes } from "./modular/bookings/booking.routes";
-import getDays from "./helper/countDays";
 
 const app = express();
 app.use(express.json());
