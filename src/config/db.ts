@@ -42,20 +42,17 @@ export const initDB = async () => {
 
 cron.schedule('0 * * * *',async () => {
     try {
-        await pool.query("BEGIN");
-        await pool.query(`
-            WITH updated_bookings AS (
+      const result =   await pool.query(`
             UPDATE  bookings
             SET status = 'returned'
             WHERE rent_end_date < NOW() AND status != 'returned'
-            RETURNING vehicle_id
-            )
-            UPDATE vehicles
-            SET availability_status = 'available'
-            WHERE id IN (SELECT vehicle_id FROM updated_bookings)
-            `);
-        await pool.query("COMMIT");    
-    } catch (error) {
-        await pool.query(`ROLLBACK`);
+            RETURNING vehicle_id`); 
+            
+        if(result.rows.length){
+            const vehicleIds = result.rows.map(row => row.vehicle_id);
+            await pool.query(`UPDATE vehicles SET availability_status=$1 WHERE id= ANY($2::INT[])`,["available",vehicleIds]);
+        }
+    } catch (error : any) {
+        throw new Error(error.message);
     }
 });
