@@ -50,7 +50,7 @@ cron.schedule('0 * * * *',async () => {
             
         if(result.rows.length){
             const vehicleIds = result.rows.map(row => row.vehicle_id);
-            await pool.query(`UPDATE vehicles SET availability_status=$1 WHERE id= ANY($2::INT[])`,["available",vehicleIds]);
+            await pool.query(`UPDATE vehicles SET availability_status=$1 WHERE id= ANY($2::int[])`,["available",vehicleIds]);
         }
     } catch (error : any) {
         throw new Error(error.message);
