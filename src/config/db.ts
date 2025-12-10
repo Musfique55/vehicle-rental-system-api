@@ -32,8 +32,8 @@ export const initDB = async () => {
         id SERIAL PRIMARY KEY,
         customer_id INT REFERENCES users(id) ON DELETE CASCADE,
         vehicle_id INT REFERENCES vehicles(id) ON DELETE CASCADE,
-        rent_start_date TIMESTAMP NOT NULL,
-        rent_end_date TIMESTAMP NOT NULL,
+        rent_start_date DATE NOT NULL,
+        rent_end_date DATE NOT NULL,
         total_price INT NOT NULL,
         status TEXT NOT NULL
         ) 

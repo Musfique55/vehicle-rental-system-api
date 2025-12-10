@@ -7,7 +7,7 @@ const createBooking = async (payload: Record<string, unknown>) => {
   const { customer_id, vehicle_id, rent_start_date, rent_end_date } = payload;
 
   const checkDate =
-    new Date(rent_start_date as string) < new Date(rent_end_date as string);
+    Date.parse(rent_start_date as string) <  Date.parse(rent_end_date as string);
 
   if (!checkDate) {
     throw new Error("end date must be after start date");
@@ -16,6 +16,7 @@ const createBooking = async (payload: Record<string, unknown>) => {
   const isAvailable = await pool.query(`SELECT * FROM vehicles WHERE id=$1`, [
     vehicle_id,
   ]);
+
 
   if (!isAvailable.rows.length) {
     throw new Error("vehicle is not found");
